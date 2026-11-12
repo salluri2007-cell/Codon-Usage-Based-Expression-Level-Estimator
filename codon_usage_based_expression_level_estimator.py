@@ -7,9 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1lz-V1xRusbhBiLYLIaKFcZHxeO3GXFci
 """
 
-# ====================================================================
-# Sub-topic 1: CODON USAGE ANALYSIS
-# ====================================================================
+## CODON USAGE ANALYSIS##
 
 import matplotlib.pyplot as plt
 import math
@@ -175,9 +173,7 @@ class CodonUsageAnalyzer:
         plt.tight_layout()
         plt.show()
 
-# ====================================================================
-# Sub-topic 2: EXPRESSION LEVEL ESTIMATOR
-# ====================================================================
+##EXPRESSION LEVEL ESTIMATOR##
 
 class ExpressionEstimator:
     """
@@ -291,9 +287,8 @@ class ExpressionEstimator:
             'classification': classification
         }
 
-# ====================================================================
-# INTEGRATED TESTS
-# ====================================================================
+
+## TESTS ##
 
 if __name__ == "__main__":
     # 1. TEST CODON USAGE ANALYSIS
