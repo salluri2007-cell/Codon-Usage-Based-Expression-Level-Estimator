@@ -1,0 +1,67 @@
+# ====================================================================
+# Codon Usage Based Expression Level Estimator
+# Sub-topic: Expression Level Estimator
+# ====================================================================
+
+import math
+
+# Reference codon counts from highly expressed genes (e.g., ribosomal genes)
+reference_counts = {
+    'ATG': 100, 'GCT': 85, 'GCC': 90, 'GCA': 10, 'GCG': 5,
+    'GAT': 70, 'GAC': 80, 'GAA': 95, 'GAG': 85, 'TTT': 20, 'TTC': 90
+}
+
+# Mapping of codons to amino acids
+codon_table = {
+    'ATG': 'M', 'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+    'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'TTT': 'F', 'TTC': 'F'
+}
+
+# Step 1: Find maximum frequency for each amino acid in reference set
+max_counts = {}
+for codon, count in reference_counts.items():
+    amino_acid = codon_table[codon]
+    if amino_acid not in max_counts or count > max_counts[amino_acid]:
+        max_counts[amino_acid] = count
+
+# Step 2: Calculate relative adaptiveness weight (w) for each codon
+w_weights = {}
+for codon, count in reference_counts.items():
+    amino_acid = codon_table[codon]
+    max_count = max_counts[amino_acid]
+    w_weights[codon] = count / max_count
+
+# Step 3: Parse target CDS sequence into codon units
+target_cds = "ATGGCCTTCGACGAA"
+codons_in_target = []
+
+for i in range(0, len(target_cds), 3):
+    single_codon = target_cds[i:i+3]
+    codons_in_target.append(single_codon)
+
+# Step 4: Compute Codon Adaptation Index (CAI) score
+total_log_w = 0.0
+total_codons = len(codons_in_target)
+
+for codon in codons_in_target:
+    weight = w_weights.get(codon, 0.01)  # Default fallback weight if missing
+    total_log_w += math.log(weight)
+
+cai_score = math.exp(total_log_w / total_codons)
+
+# Step 5: Classify expression level based on CAI score
+if cai_score >= 0.75:
+    expression_level = "High Expression"
+elif cai_score >= 0.50:
+    expression_level = "Moderate Expression"
+else:
+    expression_level = "Low Expression"
+
+# Output Results
+print("=" * 45)
+print("  EXPRESSION LEVEL ESTIMATION RESULTS")
+print("=" * 45)
+print("Target Sequence        :", target_cds)
+print("Calculated CAI Score   :", round(cai_score, 4))
+print("Estimated Expression   :", expression_level)
+print("=" * 45)
